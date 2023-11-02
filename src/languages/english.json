@@ -1,0 +1,14 @@
+{
+    "id" : "id",
+    "first.name": "first name",
+    "last.name": "first name",
+    "gender": "gender",
+    "birth.date" : "birth date",
+    "email": "email",
+    "edit" : "edit",
+    "delete" : "delete",
+
+    "createUser" :"create User",
+    "listuser" : "List of users"
+
+}

@@ -9,6 +9,7 @@ const FormEditUser = (props)=>{
     const { handleSubmit } = props;
 
   const onSubmit = (formValues) => {
+    const newUser = 
     // Handle form submission
     console.log(formValues);
   };
@@ -76,7 +77,7 @@ const FormEditUser = (props)=>{
                     {/* email div */}
                     <div className='flex justify-between  border bottom-3 rounded'>
                      <label htmlFor="">birth date</label>
-                     <Field name="dob" component={renderDatePicker}  className="w-[80%]  "placeholder="date of birth" />
+                     <Field name="birthdate" component={renderDatePicker}  className="w-[80%]  "placeholder="date of birth" />
                    </div>
 
                    {/* gender div */}

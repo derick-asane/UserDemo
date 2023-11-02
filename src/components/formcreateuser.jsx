@@ -2,13 +2,35 @@ import React from "react";
 
 import { useState } from 'react'
 import { Field, reduxForm } from 'redux-form';
+import { useQuery,gql } from "@apollo/client";
+import { ADD_USER } from "../graphql/mutatation";
+import { useMutation } from "@apollo/client";
+
+
 
 
 const FormCreateUser = (props)=>{
+  const [ addUser , {error} ]  = useMutation(ADD_USER)
 
     const { handleSubmit } = props;
 
   const onSubmit = (formValues) => {
+    const birthdate = formValues.birthdate ? formValues.birthdate.toString() : '';
+    addUser({
+      variables :{
+        user:{
+          firstname: formValues.firstname,
+          lastname: formValues.lastname,
+          email: formValues.email,
+          gender: formValues.gender,
+          birthdate: birthdate
+        }
+      }
+    })
+    if (error){
+      console.log(error)
+    }
+
     // Handle form submission
     console.log(formValues);
   };
@@ -70,7 +92,7 @@ const FormCreateUser = (props)=>{
                     {/* email div */}
                     <div className='flex justify-between  border bottom-3 rounded'>
                      <label htmlFor="">birth date</label>
-                     <Field name="dob" component={renderDatePicker}  className="w-[80%]  "placeholder="date of birth" />
+                     <Field name="birthdate" component={renderDatePicker}  className="w-[80%]  "placeholder="date of birth" />
                    </div>
 
                    {/* gender div */}
