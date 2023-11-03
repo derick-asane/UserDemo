@@ -6,9 +6,36 @@ import { FormattedMessage } from "react-intl";
 import { useQuery, gql } from "@apollo/client";
 import {GET_USERS} from '../graphql/query.jsx';
 
+import { FaTrash } from 'react-icons/fa';
+import { FaEdit } from 'react-icons/fa';
+import { DELETE_USER } from "../graphql/delete-user.jsx";
+import { useMutation } from "@apollo/client";
+
 
 
 const ListUser = () =>{
+
+
+    // we are deleting a user at this point
+    const [deleteUser] = useMutation(DELETE_USER);
+
+   
+    const handleDelete = async (id) => {
+        try {
+          const { data } = await deleteUser({ variables: { id: id } });
+          console.log('Deleted user:', data.deleteUser);
+          // handle any necessary UI updates or notifications
+        } catch (error) {
+          console.error('Error deleting user:', error);
+          // handle or display error accordingly
+        }
+      };
+    
+
+
+
+//here this is the section to fetch the data
+
     const [users, setUser] = useState([])
 
     const { loading, error, data } = useQuery(GET_USERS);
@@ -105,8 +132,8 @@ const ListUser = () =>{
                             <td>{item.email}</td>
                             <td>{item.gender}</td>
                             <td>{item.birthdate}</td>
-                            <td><Link to="/list-user/edit-user"><button className="text-blue-500">edit</button></Link></td>
-                            <td><Link to="/"><button className="text-blue-500">delete</button></Link></td>
+                            <td><Link  to={{ pathname: '/list-user/edit-user', state: {item}  }} ><button className="text-blue-500"><FaEdit className="text-green-500" /></button></Link></td>
+                            <td><button className="text-blue-500"onClick={() => handleDelete(item.id)}><FaTrash className="text-red-500" /></button></td>
                         </tr>
                     ))}
                     </tbody>

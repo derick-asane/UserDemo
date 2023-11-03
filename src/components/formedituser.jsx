@@ -3,16 +3,48 @@ import React from "react";
 import { useState } from 'react'
 import { Field, reduxForm } from 'redux-form';
 
+import { useMutation } from "@apollo/client";
+import { UPDATE_USER } from "../graphql/update-user";
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 
 const FormEditUser = (props)=>{
 
+  
+  const [updateUser] = useMutation(UPDATE_USER)
+ 
     const { handleSubmit } = props;
 
-  const onSubmit = (formValues) => {
-    const newUser = 
+  const onSubmit = async (formValues) => {
+    const birthdate = formValues.birthdate ? formValues.birthdate.toString() : '';
+    const newUser = {
+          firstname: formValues.firstname,
+          lastname: formValues.lastname,
+          email: formValues.email,
+          gender: formValues.gender,
+          birthdate: birthdate
+    }
+    const id=formValues.id;
     // Handle form submission
+    try {
+      const { data } = await updateUser({
+        variables: { id, newUser },
+      });
+
+      // Handle the response data if needed
+      console.log(data);
+    } catch (error) {
+      // Handle any errors
+      console.error(error);
+    }
+    
     console.log(formValues);
   };
+
+ 
+
+
 
     const [gender, setGender] = useState('male');
 
@@ -55,35 +87,35 @@ const FormEditUser = (props)=>{
                     {/* user ID div */}
                    <div className='flex justify-between border bottom-3 rounded'>
                      <label htmlFor="">user ID</label>
-                     <Field name="id" component="input" type="number" className="w-[80%]" placeholder=" e.g 1 "/>
+                     <Field name="id" component="input" disabled  type="number"   className="w-[80%]" placeholder=" e.g 1 "/>
                    </div>
                    {/* first name div */}
                    <div className='flex justify-between border bottom-3 rounded'>
                      <label htmlFor="">first name</label>
-                     <Field name="firstname" component="input" type="text" className="w-[80%]" placeholder="enter first name "/>
+                     <Field name="firstname" component="input"   type="text" className="w-[80%]" placeholder="enter first name "/>
                    </div>
                     {/* last name div */}
                    <div className='flex justify-between  border bottom-3 rounded'>
                      <label htmlFor="">last name</label>
-                     <Field name="lastname" component="input" type="text" className="w-[80%]" placeholder="enter last name "/>
+                     <Field name="lastname" component="input"  type="text" className="w-[80%]" placeholder="enter last name "/>
                    </div>
                     {/* email div */}
                     <div className='flex justify-between  border bottom-3 rounded '>
                      <label htmlFor="">email</label>
-                     <Field name="email" component="input" type="email" className="w-[80%]" placeholder="Lebron_james@gmail.com"/>
+                     <Field name="email" component="input"  type="email" className="w-[80%]" placeholder="Lebron_james@gmail.com"/>
 
                    </div>
 
                     {/* email div */}
                     <div className='flex justify-between  border bottom-3 rounded'>
                      <label htmlFor="">birth date</label>
-                     <Field name="birthdate" component={renderDatePicker}  className="w-[80%]  "placeholder="date of birth" />
+                     <Field name="birthdate" component={renderDatePicker}   className="w-[80%]  "placeholder="date of birth" />
                    </div>
 
                    {/* gender div */}
                    <div className='flex justify-between  border bottom-3 rounded'>
                      <label htmlFor="">gender</label>
-                     <Field name="gender" component={renderRadioButtons} />
+                     <Field name="gender"  component={renderRadioButtons}  />
                      
                    </div>
                     <div className="bg-blue-100 mt-9  border bottom-3 rounded">
@@ -97,6 +129,7 @@ const FormEditUser = (props)=>{
 
 export default reduxForm({
     form: 'formEditUser', // unique form identifier
+    
   })(FormEditUser);
 
 
